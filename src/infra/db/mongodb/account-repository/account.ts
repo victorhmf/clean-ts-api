@@ -11,12 +11,5 @@ export class AccountMongoRepository implements AddAccountRepository {
     const { _id, ...accountWithoutId } = account
 
     return { ...accountWithoutId, id: _id }
-
-    // return await new Promise(resolve => resolve({
-    //   id: '',
-    //   name: '',
-    //   email: '',
-    //   password: ''
-    // }))
   }
 }
