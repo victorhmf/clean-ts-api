@@ -1,5 +1,5 @@
 import { AccessDeniedError } from '../errors'
-import { forbidden } from '../helpers/http-helper'
+import { forbidden, ok } from '../helpers/http-helper'
 import { HttpRequest, HttpResponse, Middleware } from '../protocols'
 import { LoadAccountByToken } from '../../domain/use-cases/load-account-by-token'
 
@@ -9,7 +9,8 @@ export class AuthMiddleware implements Middleware {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const accessToken = httpRequest.headers?.['x-access-token']
     if (accessToken) {
-      await this.loadAccountByToken.load(accessToken)
+      const account = await this.loadAccountByToken.load(accessToken)
+      if (account) return ok({ accountId: account.id })
     }
 
     return forbidden(new AccessDeniedError())
